@@ -1,17 +1,14 @@
 const mongoose = require('mongoose');
 
-async function connectDB() {
+async function connectToDB() {
     try {
-        await mongoose.connect("mongodb://localhost:27017/wanderlust", {
-            useNewUrlParser: true,
-            useUnifiedTopology: true,
-        });
+        await mongoose.connect("mongodb://localhost:27017/wanderlust");
         console.log("Connected to MongoDB");
     } catch (error) {
-        console.error("Failed to connect to MongoDB", error);
+        console.error("Failed to connect to MongoDB:", error);
     }
 }
 
-connectDB();
+connectToDB();
 
-module.exports = connectDB;
+module.exports = { connectToDB };

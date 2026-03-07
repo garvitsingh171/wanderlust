@@ -1,20 +1,15 @@
-const express = require("express");
-const mongoose = require("mongoose");
+const app = require('./src/app');
+const { connectToDB } = require('./src/config/db');
 
-const app = express();
-
-async function connectDB() {
-    mongoose.connect("mongodb://localhost:27017/wanderlust");
+async function startServer() {
+    try {
+        await connectToDB();
+        app.listen(3000, () => {
+            console.log("Server is running at http://localhost:3000");
+        });
+    } catch (error) {
+        console.error("Failed to start server", error);
+    }
 }
 
-connectDB()
-    .then(() => {
-        console.log("Connected to MongoDB");
-    })
-    .catch((err) => {
-        console.error("Failed to connect to MongoDB", err);
-    });
-
-app.listen(3000, () => {
-    console.log("Server is running at http://localhost:3000");
-});
+startServer();
