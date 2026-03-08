@@ -1,4 +1,4 @@
-const bcrypt = require('bcrypt');
+const bcrypt = require('bcryptjs');
 const User = require('../models/user.model');
 
 async function registerUser({ username, email, password }) {
@@ -28,4 +28,36 @@ async function registerUser({ username, email, password }) {
     };
 }
 
-module.exports = { registerUser };
+async function loginUser({ email, password }) {
+    const user = await User.findOne({ email });
+
+    if (!user) {
+        const error = new Error('Invalid email or password');
+        error.statusCode = 401;
+        throw error;
+    }
+
+    const isMatch = await bcrypt.compare(password, user.password);
+
+    if (!isMatch) {
+        const error = new Error('Invalid email or password');
+        error.statusCode = 401;
+        throw error;
+    }
+
+    return user;
+}
+
+async function getUserById(userId) {
+    const user = await User.findById(userId).select('-password');
+
+    if (!user) {
+        const error = new Error('User not found');
+        error.statusCode = 404;
+        throw error;
+    }
+
+    return user;
+}
+
+module.exports = { registerUser, loginUser, getUserById };
