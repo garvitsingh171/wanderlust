@@ -3,7 +3,7 @@ require('dotenv').config();
 
 const { connectToDB } = require('./src/config/db');
 
-const PORT = process.env.PORT
+const PORT = process.env.PORT || 3000;
 
 async function startServer() {
     try {
