@@ -1,10 +1,10 @@
 const { createListing } = require('../services/listing.service');
-const { listingSchema } = require('../validation/listing.validation');
+const { createListingSchema } = require('../validation/listing.validation');
 const { apiResponse } = require('../utils/apiResponse');
 
 async function createListingController(req, res, next) {
     try {
-        const { error, value } = listingSchema.validate(req.body, {
+        const { error, value } = createListingSchema.validate(req.body, {
             abortEarly: false,
             stripUnknown: true,
         });
