@@ -18,7 +18,7 @@ async function createListingController(req, res, next) {
 
         const newListing = await createListing({
             ...value,
-            owner: req.user._id,
+            host: req.user.userId,
         });
 
         return res.status(201).json(apiResponse({

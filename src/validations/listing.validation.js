@@ -10,8 +10,7 @@ const createListingSchema = Joi.object({
         country: Joi.string().required().trim(),
     }).required(),
     images: Joi.array().items(Joi.string().uri()).min(1).required(),
-    amenties: Joi.array().items(Joi.string()).default([]),
-    host: Joi.string().required(),
+    amenities: Joi.array().items(Joi.string()).default([]),
 })
 
 module.exports = { createListingSchema };
