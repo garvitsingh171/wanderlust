@@ -4,6 +4,7 @@ const cookieParser = require('cookie-parser');
 const { errorHandler } = require('./middleware/errorHandler');
 
 const authRoutes = require('./routes/auth.routes');
+const listingRoutes = require('./routes/listing.routes');
 
 const app = express();
 
@@ -28,6 +29,7 @@ app.get('/health', (req, res) => {
 });
 
 app.use('/api/v1/auth', authRoutes);
+app.use('/api/v1/listings', listingRoutes);
 
 app.use((req, res, next) => {
     const error = new Error(`Route not found: ${req.originalUrl}`);

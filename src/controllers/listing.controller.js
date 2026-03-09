@@ -1,0 +1,34 @@
+const { createListing } = require('../services/listing.service');
+const { listingSchema } = require('../validation/listing.validation');
+const { apiResponse } = require('../utils/apiResponse');
+
+async function createListingController(req, res, next) {
+    try {
+        const { error, value } = listingSchema.validate(req.body, {
+            abortEarly: false,
+            stripUnknown: true,
+        });
+
+        if (error) {
+            const validationError = new Error(
+                error.details.map((d) => d.message).join(', ')
+            );
+            return next(validationError);
+        }
+
+        const newListing = await createListing({
+            ...value,
+            owner: req.user._id,
+        });
+
+        return res.status(201).json(apiResponse({
+            success: true,
+            message: 'Listing created successfully',
+            data: newListing,
+        }));
+    } catch (error) {
+        next(error);
+    }
+}
+
+module.exports = { createListingController };
