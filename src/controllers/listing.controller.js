@@ -1,4 +1,4 @@
-const { createListing } = require('../services/listing.service');
+const { createListing, getAllListings, getListingsById } = require('../services/listing.service');
 const { createListingSchema } = require('../validations/listing.validation');
 const { apiResponse } = require('../utils/apiResponse');
 
@@ -33,4 +33,32 @@ async function createListingController(req, res, next) {
     }
 }
 
-module.exports = { createListingController };
+async function getAllListingsController(req, res, next) {
+    try {
+        const listings = await getAllListings();
+        return res.status(200).json(apiResponse({
+            success: true,
+            message: 'Listings retrieved successfully',
+            data: listings,
+        }));
+    } catch (error) {
+        error.statusCode = error.statusCode || 500;
+        next(error);
+    }
+}
+
+async function getListingByIdController(req, res, next) {
+    try {
+        const listing = await getListingsById(req.params.id);
+        return res.status(200).json(apiResponse({
+            success: true,
+            message: 'Listing retrieved successfully',
+            data: listing,
+        }));
+    } catch (error) {
+        error.statusCode = error.statusCode || 500;
+        next(error);
+    }
+}
+
+module.exports = { createListingController, getAllListingsController, getListingByIdController };
