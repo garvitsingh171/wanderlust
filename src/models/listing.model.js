@@ -17,11 +17,21 @@ const listingSchema = new mongoose.Schema({
         min: 0,
     },
     location: {
-        city: String,
-        state: String,
-        country: String,
-        required: true,
-        trim: true,
+        city: {
+            type: String,
+            required: true,
+            trim: true,
+        },
+        state: {
+            type: String,
+            required: true,
+            trim: true,
+        },
+        country: {
+            type: String,
+            required: true,
+            trim: true,
+        },
     },
     images: {
         type: [String],

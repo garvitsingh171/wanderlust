@@ -1,5 +1,5 @@
 const { createListing } = require('../services/listing.service');
-const { createListingSchema } = require('../validation/listing.validation');
+const { createListingSchema } = require('../validations/listing.validation');
 const { apiResponse } = require('../utils/apiResponse');
 
 async function createListingController(req, res, next) {
@@ -13,6 +13,7 @@ async function createListingController(req, res, next) {
             const validationError = new Error(
                 error.details.map((d) => d.message).join(', ')
             );
+            validationError.statusCode = 400;
             return next(validationError);
         }
 
@@ -27,6 +28,7 @@ async function createListingController(req, res, next) {
             data: newListing,
         }));
     } catch (error) {
+        error.statusCode = error.statusCode || 500;
         next(error);
     }
 }
