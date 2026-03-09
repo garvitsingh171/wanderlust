@@ -9,7 +9,7 @@ async function getAllListings() {
     return (await Listing.find()).sort({ createdAt: -1 }).populate('host', 'username email');
 }
 
-async function getListingsById(listingId) {
+async function getListingById(listingId) {
     const listing = await Listing.findById(listingId).populate('host', 'username email');
 
     if (!listing) {
@@ -21,4 +21,37 @@ async function getListingsById(listingId) {
     return listing;
 }
 
-module.exports = { createListing, getAllListings, getListingsById };
+async function updateListingById(listingId, updates) {
+    const listing = await Listing.findByIdAndUpdate(listingId, updates, {
+        new: true,
+        runValidators: true,
+    }).populate('host', 'username email');
+
+    if (!listing) {
+        const error = new Error('Listing not found');
+        error.statusCode = 404;
+        throw error;
+    }
+
+    return listing;
+}
+
+async function deleteListingById(listingId) {
+    const listing = await Listing.findByIdAndDelete(listingId);
+
+    if (!listing) {
+        const error = new Error('Listing not found');
+        error.statusCode = 404;
+        throw error;
+    }
+
+    return listing;
+}
+
+module.exports = {
+    createListing,
+    getAllListings,
+    getListingById,
+    updateListingById,
+    deleteListingById,
+};
