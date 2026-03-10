@@ -16,6 +16,11 @@ export async function createListing(payload) {
 }
 
 export async function updateListing(id, payload) {
-    const { data } = await apiClient.put(`/listings/${id}`, payload);
+    const { data } = await apiClient.patch(`/listings/${id}`, payload);
+    return data;
+}
+
+export async function deleteListing(id) {
+    const { data } = await apiClient.delete(`/listings/${id}`);
     return data;
 }
