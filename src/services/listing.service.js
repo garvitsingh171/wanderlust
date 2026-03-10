@@ -6,7 +6,9 @@ async function createListing(listingData) {
 }
 
 async function getAllListings() {
-    return (await Listing.find()).sort({ createdAt: -1 }).populate('host', 'username email');
+    return Listing.find()
+        .sort({ createdAt: -1 })
+        .populate('host', 'username email');
 }
 
 async function getListingById(listingId) {
