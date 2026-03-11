@@ -1,5 +1,5 @@
 import { useEffect, useMemo, useState } from 'react';
-import { getCurrentUser, loginUser, logoutUser, registerUser } from '../services/authApi';
+import { getCurrentUser, loginUser, logoutUser, registerUser } from '../services/authService';
 import { AuthContext } from './authContextObject';
 
 export function AuthProvider({ children }) {
