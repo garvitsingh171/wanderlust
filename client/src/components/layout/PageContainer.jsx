@@ -1,5 +1,5 @@
 function PageContainer({ children }) {
-	return <div>{children}</div>;
+	return <div className="min-h-screen bg-white">{children}</div>;
 }
 
 export default PageContainer;

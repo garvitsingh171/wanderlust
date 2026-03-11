@@ -1,68 +1,110 @@
-:root {
-  font-family: system-ui, Avenir, Helvetica, Arial, sans-serif;
-  line-height: 1.5;
-  font-weight: 400;
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
 
-  color-scheme: light dark;
-  color: rgba(255, 255, 255, 0.87);
-  background-color: #242424;
-
-  font-synthesis: none;
-  text-rendering: optimizeLegibility;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-}
-
-a {
-  font-weight: 500;
-  color: #646cff;
-  text-decoration: inherit;
-}
-a:hover {
-  color: #535bf2;
-}
-
-body {
-  margin: 0;
-  display: flex;
-  place-items: center;
-  min-width: 320px;
-  min-height: 100vh;
-}
-
-h1 {
-  font-size: 3.2em;
-  line-height: 1.1;
-}
-
-button {
-  border-radius: 8px;
-  border: 1px solid transparent;
-  padding: 0.6em 1.2em;
-  font-size: 1em;
-  font-weight: 500;
-  font-family: inherit;
-  background-color: #1a1a1a;
-  cursor: pointer;
-  transition: border-color 0.25s;
-}
-button:hover {
-  border-color: #646cff;
-}
-button:focus,
-button:focus-visible {
-  outline: 4px auto -webkit-focus-ring-color;
-}
-
-@media (prefers-color-scheme: light) {
-  :root {
-    color: #213547;
-    background-color: #ffffff;
+@layer base {
+  * {
+    @apply transition-colors duration-200;
   }
-  a:hover {
-    color: #747bff;
+
+  body {
+    @apply bg-white text-gray-900 font-sans;
   }
+
+  a {
+    @apply text-airbnb-pink hover:text-airbnb-pink-dark transition-colors duration-200;
+  }
+
+  h1 {
+    @apply text-5xl font-bold text-airbnb-dark tracking-tight;
+  }
+
+  h2 {
+    @apply text-3xl font-bold text-airbnb-dark;
+  }
+
+  h3 {
+    @apply text-xl font-semibold text-airbnb-dark;
+  }
+
+  h4 {
+    @apply text-lg font-semibold text-gray-900;
+  }
+
+  p {
+    @apply text-gray-700 leading-relaxed;
+  }
+
   button {
-    background-color: #f9f9f9;
+    @apply focus:outline-none focus:ring-2 focus:ring-airbnb-pink focus:ring-offset-2 active:scale-95;
+  }
+}
+
+@layer components {
+  /* Buttons */
+  .btn-primary {
+    @apply bg-airbnb-pink text-white px-6 py-3 rounded-lg font-semibold hover:bg-airbnb-pink-dark active:scale-95 transition-all duration-200 shadow-md hover:shadow-lg disabled:opacity-50 disabled:cursor-not-allowed;
+  }
+
+  .btn-secondary {
+    @apply border-2 border-gray-300 text-gray-900 px-5 py-2.5 rounded-full font-medium hover:border-airbnb-dark hover:bg-gray-50 transition-all duration-200;
+  }
+
+  .btn-secondary:aria-pressed-true {
+    @apply border-airbnb-dark bg-airbnb-dark text-white;
+  }
+
+  .btn-ghost {
+    @apply text-gray-700 hover:text-airbnb-pink hover:bg-airbnb-light px-4 py-2 rounded-lg transition-all duration-200;
+  }
+
+  /* Cards */
+  .card-listing {
+    @apply bg-white rounded-xl overflow-hidden shadow-card hover:shadow-card-hover transition-all duration-300 cursor-pointer hover:-translate-y-1 animate-fade-in;
+  }
+
+  .card-listing:hover {
+    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.15);
+  }
+
+  /* Inputs */
+  .input-search {
+    @apply w-full px-5 py-3 border-2 border-gray-300 rounded-lg text-base focus:outline-none focus:border-airbnb-pink focus:ring-2 focus:ring-airbnb-pink focus:ring-opacity-10 transition-all duration-200 placeholder-gray-400;
+  }
+
+  .input-field {
+    @apply w-full px-4 py-2.5 border border-gray-300 rounded-lg text-base focus:outline-none focus:border-airbnb-pink focus:ring-2 focus:ring-airbnb-pink focus:ring-opacity-10 transition-all duration-200;
+  }
+
+  /* Badges */
+  .badge-primary {
+    @apply inline-flex items-center px-3 py-1 rounded-full text-sm font-medium bg-airbnb-blue-light text-airbnb-blue;
+  }
+
+  .badge-success {
+    @apply inline-flex items-center px-3 py-1 rounded-full text-sm font-medium bg-green-100 text-green-800;
+  }
+
+  .badge-warning {
+    @apply inline-flex items-center px-3 py-1 rounded-full text-sm font-medium bg-yellow-100 text-yellow-800;
+  }
+
+  /* Text Utilities */
+  .text-gradient {
+    @apply bg-gradient-to-r from-airbnb-pink to-airbnb-pink-dark bg-clip-text text-transparent;
+  }
+
+  .section-heading {
+    @apply text-3xl font-bold text-airbnb-dark mb-6;
+  }
+
+  /* Dividers */
+  .divider {
+    @apply border-t border-airbnb-border;
+  }
+
+  /* Rating Stars */
+  .star {
+    @apply inline-block text-airbnb-gold;
   }
 }
