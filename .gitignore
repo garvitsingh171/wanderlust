@@ -143,5 +143,6 @@ vite.config.js.timestamp-*
 vite.config.ts.timestamp-*
 .vite/
 
-# Other files
+# Other files and folders
 Notes.txt
+uploads/

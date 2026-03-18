@@ -9,7 +9,7 @@ const createListingSchema = Joi.object({
         state: Joi.string().required().trim(),
         country: Joi.string().required().trim(),
     }).required(),
-    images: Joi.array().items(Joi.string().uri()).min(1).required(),
+    images: Joi.array().items(Joi.string().min(1)).min(1).required(),
     amenities: Joi.array().items(Joi.string()).default([]),
 });
 
@@ -22,7 +22,7 @@ const updateListingSchema = Joi.object({
         state: Joi.string().trim(),
         country: Joi.string().trim(),
     }),
-    images: Joi.array().items(Joi.string().uri()).min(1),
+    images: Joi.array().items(Joi.string().min(1)).min(1),
     amenities: Joi.array().items(Joi.string()),
 }).min(1);
 

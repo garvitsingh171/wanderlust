@@ -4,6 +4,7 @@ import Navbar from '../components/layout/Navbar';
 import Loader from '../components/ui/Loader';
 import ErrorMessage from '../components/ui/ErrorMessage';
 import { getListingById } from '../services/listingApi';
+import { getImageUrl } from '../utils/getImageUrl';
 
 function ListingDetailPage() {
     const { id } = useParams();
@@ -62,8 +63,8 @@ function ListingDetailPage() {
         return null;
     }
 
-    const mainImage = listing.images?.[0];
-    const galleryImages = listing.images?.slice(1, 5) || [];
+    const mainImage = getImageUrl(listing.images?.[0]);
+    const galleryImages = (listing.images?.slice(1, 5) || []).map((imagePath) => getImageUrl(imagePath));
     const amenities = listing.amenities || [];
 
     return (

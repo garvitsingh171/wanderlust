@@ -11,12 +11,16 @@ export async function getListingById(id) {
 }
 
 export async function createListing(payload) {
-    const { data } = await apiClient.post('/listings', payload);
+    const { data } = await apiClient.post('/listings', payload, {
+        headers: { 'Content-Type': 'multipart/form-data' },
+    });
     return data;
 }
 
 export async function updateListing(id, payload) {
-    const { data } = await apiClient.patch(`/listings/${id}`, payload);
+    const { data } = await apiClient.patch(`/listings/${id}`, payload, {
+        headers: { 'Content-Type': 'multipart/form-data' },
+    });
     return data;
 }
 

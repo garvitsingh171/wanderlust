@@ -1,5 +1,6 @@
 const express = require('express');
 const cors = require('cors');
+const path = require('path');
 const cookieParser = require('cookie-parser');
 const { errorHandler } = require('./middleware/errorHandler');
 
@@ -28,6 +29,7 @@ app.get('/health', (req, res) => {
     });
 });
 
+app.use('/uploads/listing-images', express.static(path.join(process.cwd(), 'uploads/listing-images')));
 app.use('/api/v1/auth', authRoutes);
 app.use('/api/v1/listings', listingRoutes);
 

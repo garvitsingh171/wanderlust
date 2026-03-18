@@ -8,9 +8,38 @@ const {
 const { createListingSchema, updateListingSchema } = require('../validations/listing.validation');
 const { apiResponse } = require('../utils/apiResponse');
 
+function parseJsonField(value, fallback) {
+    if (value === undefined || value === null) return fallback;
+    if (typeof value !== 'string') return value;
+
+    try {
+        return JSON.parse(value);
+    } catch {
+        return fallback;
+    }
+}
+
+function buildUploadedImageUrls(req) {
+    const files = req.files || [];
+    return files.map((file) => `${req.protocol}://${req.get('host')}/uploads/listing-images/${file.filename}`);
+}
+
 async function createListingController(req, res, next) {
     try {
-        const { error, value } = createListingSchema.validate(req.body, {
+        const uploadedImageUrls = buildUploadedImageUrls(req);
+
+        const rawPayload = {
+            title: req.body.title,
+            description: req.body.description,
+            pricePerNight: Number(req.body.pricePerNight),
+            location: parseJsonField(req.body.location, {}),
+            amenities: parseJsonField(req.body.amenities, []),
+            images: uploadedImageUrls.length > 0
+                ? uploadedImageUrls
+                : parseJsonField(req.body.images, []),
+        };
+
+        const { error, value } = createListingSchema.validate(rawPayload, {
             abortEarly: false,
             stripUnknown: true,
         });
@@ -69,7 +98,28 @@ async function getListingByIdController(req, res, next) {
 
 async function updateListingController(req, res, next) {
     try {
-        const { error, value } = updateListingSchema.validate(req.body, {
+        const uploadedImageUrls = buildUploadedImageUrls(req);
+        const updates = {};
+
+        if (req.body.title !== undefined) updates.title = req.body.title;
+        if (req.body.description !== undefined) updates.description = req.body.description;
+        if (req.body.pricePerNight !== undefined) updates.pricePerNight = Number(req.body.pricePerNight);
+
+        if (req.body.location !== undefined) {
+            updates.location = parseJsonField(req.body.location, {});
+        }
+
+        if (req.body.amenities !== undefined) {
+            updates.amenities = parseJsonField(req.body.amenities, []);
+        }
+
+        if (uploadedImageUrls.length > 0) {
+            updates.images = uploadedImageUrls;
+        } else if (req.body.images !== undefined) {
+            updates.images = parseJsonField(req.body.images, []);
+        }
+
+        const { error, value } = updateListingSchema.validate(updates, {
             abortEarly: false,
             stripUnknown: true,
         });

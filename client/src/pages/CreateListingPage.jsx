@@ -17,9 +17,9 @@ function CreateListingPage() {
             state: '',
             country: '',
         },
-        images: [''],
     });
 
+    const [imageFiles, setImageFiles] = useState([]);
     const [amenitiesInput, setAmenitiesInput] = useState('');
     const [isSubmitting, setIsSubmitting] = useState(false);
     const [error, setError] = useState('');
@@ -51,48 +51,14 @@ function CreateListingPage() {
         }));
     }
 
-    function handleImageChange(index, value) {
-        setFormData((prev) => {
-            const updatedImages = [...prev.images];
-            updatedImages[index] = value;
-
-            return {
-                ...prev,
-                images: updatedImages,
-            };
-        });
-    }
-
-    function addImageField() {
-        setFormData((prev) => ({
-            ...prev,
-            images: [...prev.images, ''],
-        }));
-    }
-
-    function removeImageField(indexToRemove) {
-        setFormData((prev) => {
-            if (prev.images.length === 1) {
-                return {
-                    ...prev,
-                    images: [''],
-                };
-            }
-
-            return {
-                ...prev,
-                images: prev.images.filter((_, index) => index !== indexToRemove),
-            };
-        });
+    function handleImageFilesChange(event) {
+        const files = Array.from(event.target.files || []);
+        setImageFiles(files);
     }
 
     async function handleSubmit(event) {
         event.preventDefault();
         setError('');
-
-        const cleanedImages = formData.images
-            .map((imageUrl) => imageUrl.trim())
-            .filter(Boolean);
 
         const cleanedAmenities = amenitiesInput
             .split(',')
@@ -113,23 +79,25 @@ function CreateListingPage() {
             return;
         }
 
-        if (cleanedImages.length === 0) {
-            setError('At least one image URL is required.');
+        if (imageFiles.length === 0) {
+            setError('At least one image is required.');
             return;
         }
 
-        const payload = {
-            title: formData.title.trim(),
-            description: formData.description.trim(),
-            pricePerNight: Number(formData.pricePerNight),
-            location: {
-                city: formData.location.city.trim(),
-                state: formData.location.state.trim(),
-                country: formData.location.country.trim(),
-            },
-            images: cleanedImages,
-            amenities: cleanedAmenities,
-        };
+        const payload = new FormData();
+        payload.append('title', formData.title.trim());
+        payload.append('description', formData.description.trim());
+        payload.append('pricePerNight', String(Number(formData.pricePerNight)));
+        payload.append('location', JSON.stringify({
+            city: formData.location.city.trim(),
+            state: formData.location.state.trim(),
+            country: formData.location.country.trim(),
+        }));
+        payload.append('amenities', JSON.stringify(cleanedAmenities));
+
+        imageFiles.forEach((file) => {
+            payload.append('images', file);
+        });
 
         try {
             setIsSubmitting(true);
@@ -275,43 +243,29 @@ function CreateListingPage() {
                             </fieldset>
 
                             <fieldset className="grid gap-5 rounded-3xl border border-airbnb-border p-5 sm:p-6">
-                                <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
-                                    <div>
-                                        <legend className="text-lg font-semibold text-airbnb-dark">Images</legend>
-                                        <p className="text-sm text-gray-600">Add one or more direct image URLs for the listing gallery.</p>
-                                    </div>
-                                    <button type="button" onClick={addImageField} className="btn-ghost self-start sm:self-auto">
-                                        + Add another image
-                                    </button>
+                                <div>
+                                    <legend className="text-lg font-semibold text-airbnb-dark">Images</legend>
+                                    <p className="text-sm text-gray-600">Upload up to 5 images (max 5MB each).</p>
                                 </div>
 
-                                <div className="grid gap-4">
-                                    {formData.images.map((imageUrl, index) => (
-                                        <div key={index} className="rounded-2xl bg-airbnb-light-gray/70 p-4">
-                                            <div className="mb-3 flex items-center justify-between gap-3">
-                                                <label htmlFor={`image-${index}`} className="text-sm font-semibold text-airbnb-dark">
-                                                    Image URL {index + 1}
-                                                </label>
-                                                <button
-                                                    type="button"
-                                                    onClick={() => removeImageField(index)}
-                                                    className="text-sm font-medium text-gray-500 hover:text-airbnb-pink"
-                                                >
-                                                    Remove
-                                                </button>
-                                            </div>
-                                            <input
-                                                id={`image-${index}`}
-                                                type="url"
-                                                value={imageUrl}
-                                                onChange={(event) =>
-                                                    handleImageChange(index, event.target.value)
-                                                }
-                                                placeholder="https://example.com/image.jpg"
-                                                className="input-field"
-                                            />
-                                        </div>
-                                    ))}
+                                <div>
+                                    <label htmlFor="images" className="mb-2 block text-sm font-semibold text-airbnb-dark">
+                                        Listing Images
+                                    </label>
+                                    <input
+                                        id="images"
+                                        name="images"
+                                        type="file"
+                                        accept="image/*"
+                                        multiple
+                                        onChange={handleImageFilesChange}
+                                        className="input-field"
+                                    />
+                                    {imageFiles.length > 0 && (
+                                        <p className="mt-2 text-sm text-gray-500">
+                                            Selected: {imageFiles.map((file) => file.name).join(', ')}
+                                        </p>
+                                    )}
                                 </div>
                             </fieldset>
 
