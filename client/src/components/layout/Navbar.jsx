@@ -26,7 +26,11 @@ function Navbar() {
                     aria-label="Wanderlust home"
                 >
                     <span className="nav-brand-mark" aria-hidden="true">
-                        🏠
+                        <img
+                            src="/wanderlustLogo.jpg"
+                            alt="logo"
+                            className="w-6 h-6 sm:w-7 sm:h-7"
+                        />
                     </span>
                     <span className="flex flex-col leading-none">
                         <span className="text-[0.7rem] font-semibold uppercase tracking-[0.28em] text-gray-400">
